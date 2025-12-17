@@ -10,8 +10,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
 # sys.path.insert(0, os.path.abspath('.'))
 # sys.path.insert(0, os.path.abspath('../..')) # Adjust if you have Python code to autodoc
 
@@ -67,9 +67,12 @@ html_static_path = ['_static']
 
 # -- Options for GitHub Pages ------------------------------------------------
 # GitHub Pages 配置
-# 如果你的仓库名不是 user-guide-main，请修改下面的路径
+# 如果设置了 GITHUB_PAGES_BASE_URL 环境变量，将自动使用它
 # 格式：https://用户名.github.io/仓库名/
-# html_baseurl = 'https://yourusername.github.io/user-guide-main/'
+if os.environ.get('GITHUB_PAGES_BASE_URL'):
+    html_baseurl = os.environ.get('GITHUB_PAGES_BASE_URL')
+    if not html_baseurl.endswith('/'):
+        html_baseurl += '/'
 
 # -- Options for MyST Parser -------------------------------------------------
 # If you want to use Markdown files

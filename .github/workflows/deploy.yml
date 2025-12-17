@@ -35,12 +35,20 @@ jobs:
 
       - name: Build documentation
         working-directory: docs
+        env:
+          GITHUB_PAGES_BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
         run: |
           make html
 
       - name: Create .nojekyll file
         run: |
-          touch docs/build/html/.nojekyll
+          echo "" > docs/build/html/.nojekyll
+
+      - name: List files to verify
+        run: |
+          ls -la docs/build/html/ | head -20
+          test -f docs/build/html/index.html && echo "✓ index.html exists" || echo "✗ index.html missing"
+          test -f docs/build/html/.nojekyll && echo "✓ .nojekyll exists" || echo "✗ .nojekyll missing"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -62,4 +70,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      
+      - name: Display deployment URL
+        run: |
+          echo "🚀 Deployment successful!"
+          echo "📄 Your site is available at: ${{ steps.deployment.outputs.page_url }}"
+          echo "🔗 Repository: ${{ github.repository }}"
+          echo "👤 Owner: ${{ github.repository_owner }}"
 
